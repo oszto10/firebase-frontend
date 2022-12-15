@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useEffect, useState } from "react";
+import Person from "./components/Person";
 
 function App() {
+  const [people, setPeople] = useState([]);
+
+  useEffect(() => {
+    fetch("https://swapi.dev/api/people")
+      .then((res) => res.json())
+      .then((data) => {
+        setPeople(data.results);
+        console.log(data.results);
+      });
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {people.map((person, i) => (
+        <Person
+          key={i}
+          name={person.name}
+          height={person.height}
+          mass={person.mass}
+        />
+      ))}
     </div>
   );
 }
